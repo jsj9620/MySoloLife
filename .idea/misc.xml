@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable/background_radius.xml" value="0.3087179487179487" />
+        <entry key="app/src/main/res/drawable/background_radius_yellow.xml" value="0.3087179487179487" />
+        <entry key="app/src/main/res/layout/activity_content_list.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/activity_content_show.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_intro.xml" value="0.29739583333333336" />
+        <entry key="app/src/main/res/layout/activity_join.xml" value="0.29739583333333336" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.29739583333333336" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/content_rv_item.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/fragment_bookmark.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/fragment_store.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/fragment_talk.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/fragment_tip.xml" value="0.25" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

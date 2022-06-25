@@ -14,21 +14,21 @@ import com.seungjun.mysolelife.R
 import com.seungjun.mysolelife.utils.FBAuth
 import com.seungjun.mysolelife.utils.FBRef
 
-class ContentRVAdapter(
+class BookmarkRVAdapter (
     val context: Context,
     val items: ArrayList<ContentModel>,
     val keyList: ArrayList<String>,
     val bookmarkIdList: MutableList<String>
 ) :
-    RecyclerView.Adapter<ContentRVAdapter.Viewholder>() {
+    RecyclerView.Adapter<BookmarkRVAdapter.Viewholder>() {
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContentRVAdapter.Viewholder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkRVAdapter.Viewholder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.content_rv_item, parent, false)
         return Viewholder(v)
     }
 
-    override fun onBindViewHolder(holder: ContentRVAdapter.Viewholder, position: Int) {
+    override fun onBindViewHolder(holder: BookmarkRVAdapter.Viewholder, position: Int) {
         holder.bindItems(items[position], keyList[position])
     }
 
@@ -55,25 +55,6 @@ class ContentRVAdapter(
                 bookmarkArea.setImageResource(R.drawable.bookmark_white)
             }
 
-            bookmarkArea.setOnClickListener {
-                Toast.makeText(context, key, Toast.LENGTH_LONG).show()
-
-
-                if (bookmarkIdList.contains(key)) {
-                    FBRef.bookmarkRef
-                        .child(FBAuth.getUid())
-                        .child(key)
-                        .removeValue()
-                } else {
-                    // 북마크 X
-                    FBRef.bookmarkRef
-                        .child(FBAuth.getUid())
-                        .child(key)
-                        .setValue(BookmarkModel(true))
-                }
-
-
-            }
 
             contentTitle.text = item.title
             Glide.with(context)

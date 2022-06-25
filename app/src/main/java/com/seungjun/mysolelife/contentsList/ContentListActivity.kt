@@ -16,22 +16,27 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.seungjun.mysolelife.R
+import com.seungjun.mysolelife.utils.FBAuth
+import com.seungjun.mysolelife.utils.FBRef
 
 class ContentListActivity : AppCompatActivity() {
     lateinit var myRef : DatabaseReference
+    lateinit var rvAdapter: ContentRVAdapter
+    val bookmarkIdList = mutableListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_content_list)
 
         val items = ArrayList<ContentModel>()
-        val rvAdapter = ContentRVAdapter(baseContext, items)
+        val itemKeyList = ArrayList<String>()
+        rvAdapter = ContentRVAdapter(baseContext, items, itemKeyList, bookmarkIdList)
 
         val database = Firebase.database
 
         val category = intent.getStringExtra("category")
 
         if (category == "category1") {
-            myRef = database.getReference("contents1")
+            myRef = database.getReference("contents")
         } else if (category == "category2") {
             myRef = database.getReference("contents2")
         } else if (category == "category3") {
@@ -47,6 +52,7 @@ class ContentListActivity : AppCompatActivity() {
                     Log.d("ContentListActivity", dataModel.toString())
                     val item = dataModel.getValue(ContentModel::class.java)
                     items.add(item!!)
+                    itemKeyList.add(dataModel.key.toString())
                 }
                 rvAdapter.notifyDataSetChanged() //data 동기화
             }
@@ -64,28 +70,24 @@ class ContentListActivity : AppCompatActivity() {
 
         rv.layoutManager = GridLayoutManager(this, 2)
 
-        rvAdapter.itemClick = object : ContentRVAdapter.ItemClick {
-            override fun onClick(view: View, position: Int) {
-                Toast.makeText(baseContext, items[position].title, Toast.LENGTH_LONG).show()
-                val intent = Intent(
-                    this@ContentListActivity,
-                    ContentShowActivity::class.java
-                ) // 클릭하면 웹사이트 띄우는거로 넘김
-                intent.putExtra("url", items[position].webUrl) // url 넘기기 (ContentShowActivity로)
-                startActivity(intent)
+        getBookmarkData()
+    }
+
+    private fun getBookmarkData() {
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                bookmarkIdList.clear()
+                for (dataModel in dataSnapshot.children) { //data 받아옴
+                    bookmarkIdList.add(dataModel.key.toString())
+                }
+                rvAdapter.notifyDataSetChanged()
             }
 
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Getting Post failed, log a message
+                Log.w("ContentListActivity", "loadPost:onCancelled", databaseError.toException())
+            }
         }
-        val myRef2 = database.getReference("contents4")
-        myRef2.push().setValue(
-            ContentModel("title13", "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbdIKDG%2Fbtq64M96JFa%2FKcJiYgKuwKuP3fIyviXm90%2Fimg.png", "https://philosopher-chan.tistory.com/1247?category=941578")
-        )
-        myRef2.push().setValue(
-            ContentModel("title14", "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FFtY3t%2Fbtq65q6P4Zr%2FWe64GM8KzHAlGE3xQ2nDjk%2Fimg.png","https://philosopher-chan.tistory.com/1248?category=941578")
-        )
-        myRef2.push().setValue(
-            ContentModel("title15", "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FOtaMq%2Fbtq67OMpk4W%2FH1cd0mda3n2wNWgVL9Dqy0%2Fimg.png","https://philosopher-chan.tistory.com/1249?category=941578")
-        )
-
+        FBRef.bookmarkRef.child(FBAuth.getUid()).addValueEventListener(postListener)
     }
 }
